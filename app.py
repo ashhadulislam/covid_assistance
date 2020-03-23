@@ -65,6 +65,8 @@ def add_mosque():
     oil_qty=str(request.form['oil_qty'])
     daal_qty=str(request.form['daal_qty'])
 
+    request_status="Order Placed"
+
     data_list.append(name)
     data_list.append(contact_num)
     data_list.append(lat)
@@ -75,6 +77,14 @@ def add_mosque():
     data_list.append(wheat_qty)
     data_list.append(oil_qty)
     data_list.append(daal_qty)
+
+    data_list.append(request_status)
+
+
+
+
+
+
 
 
     print(name,lat,lon,contact_num,rice_qty,wheat_qty,oil_qty)
