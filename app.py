@@ -37,22 +37,6 @@ def get_sheet():
 
 
 
-def insert_into_gdrive(data_list):
-    '''
-    insert into the google sheet in the order
-    name, contact_num,lat, lon, address,
-    rice_qty, wheat_qty, oil_qty, daal_qty,
-    request_status
-    '''
-    sheet=get_sheet()
-    
-    row = data_list
-    index = len(sheet.get_all_values())+1
-    print("last id ",sheet.get_all_values()[-1][0])
-    request_id=int(sheet.get_all_values()[-1][0])+1
-    row=[request_id]+row
-    sheet.insert_row(row, index)
-
 
 def get_requests(status):
     '''
@@ -146,13 +130,33 @@ def mark_as_complete():
             sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
         row_count+=1
 
-    return "ok"
+    return "Thanks for helping out."
 
 
 
+def insert_into_gsheet(data_list):
+    '''
+    insert into the google sheet in the order
+    name, contact_num,lat, lon, address,
+    rice_qty, wheat_qty, oil_qty, daal_qty,
+    request_status
+    '''
+    sheet=get_sheet()
+    
+    row = data_list
+    index = len(sheet.get_all_values())+1
+    print("last id ",sheet.get_all_values()[-1][0])
+    if len(sheet.get_all_values())>=2:
+        request_id=int(sheet.get_all_values()[-1][0])+1
+    else:
+        # first request
+        request_id=1
+    row=[request_id]+row
+    sheet.insert_row(row, index)
 
 
-@application.route('/load_in_db',methods=["POST"])
+
+@application.route('/load_in_sheet',methods=["POST"])
 def add_pending_request():
 
     data_list=[]
@@ -198,7 +202,7 @@ def add_pending_request():
 
 
     
-    insert_into_gdrive(data_list)
+    insert_into_gsheet(data_list)
 
     return "Thanks for requesting. We will get back to you soon."
 
