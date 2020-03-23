@@ -63,6 +63,7 @@ def add_mosque():
     rice_qty=str(request.form['rice_qty'])
     wheat_qty=str(request.form['wheat_qty'])
     oil_qty=str(request.form['oil_qty'])
+    daal_qty=str(request.form['daal_qty'])
 
     data_list.append(name)
     data_list.append(contact_num)
@@ -73,6 +74,7 @@ def add_mosque():
     data_list.append(rice_qty)
     data_list.append(wheat_qty)
     data_list.append(oil_qty)
+    data_list.append(daal_qty)
 
 
     print(name,lat,lon,contact_num,rice_qty,wheat_qty,oil_qty)
