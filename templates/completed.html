@@ -30,11 +30,10 @@
 	</head>
 		
 
-	<body>
-
-		
+	<body>		
 			<table>
 			  <tr>
+			  	<th>Request ID</th>
 			    <th>Name</th>
 			    <th>Contact Number</th>
 			    <th>Latitude</th>
@@ -50,6 +49,7 @@
 			  
 			  {% for item in items %}		  
 			  <tr>
+			  	<td>{{item.request_id}}</td>
 			  	<td>{{item.name}}</td>
 			  	<td>{{item.contact_num}}</td>
 			  	<td>{{item.lat}}</td>
@@ -62,8 +62,6 @@
 			  	<td>{{item.oil_qty}}</td>
 			  	<td>{{item.daal_qty}}</td>
 		  	 	
-
-
 			  </tr>
 			  {% endfor %}
 			  
