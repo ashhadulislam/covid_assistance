@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request,send_from_directory, jsonify
+from flask import Flask, render_template, request,send_from_directory, jsonify, url_for
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -15,9 +15,16 @@ beneficiary_contact_index=11
 # counting from 0
 # when using in sheet, add 1
 
+
 @application.route('/')
-def add_request():    
-    return render_template('index.html')
+def show_home():    
+    return render_template('base.html')
+
+
+
+@application.route('/addneedy')
+def addneedy():    
+    return render_template('addneedy.html')
 
 
 
