@@ -16,7 +16,12 @@
 			  border-collapse: collapse;
 			  width: 100%;
 			}
-
+            .Container{
+				margin-top: 15px;
+			}
+			.Row{
+				margin-left: 5px;
+			}
 			td, th {
 			  border: 1px solid #dddddd;
 			  text-align: left;
@@ -26,6 +31,9 @@
 			tr:nth-child(even) {
 			  background-color: #dddddd;
 			}
+			label{
+				float : left;
+			}
 		</style>		
 
 
@@ -33,7 +41,7 @@
 		
 
 	<body>
-
+       <div class='container'>
 		<form action="/mark_as_complete" method="post" enctype="multipart/form-data">
 			<table>
 			  <tr>
@@ -68,13 +76,15 @@
 			  {% endfor %}
 			  
 			</table>
-			<div class="container_black_text">
-				<div class="form-group">
-			      	<label>Contact Number(10 digit Mobile):</label>
-			      	<input type="text" onfocus="this.value=''" class="form-control" id="contact_num" placeholder="Contact Number" name="contact_num">
+			
+			<div class="container_black_text" style = "justify-content: center;margin-top: 10px;">
+				<div class="form-group" >
+					<div class ="row"> <label>Contact Number(10 digit Mobile):</label> </div>
+					 
+			      	<div class = "row"><input type="text" onfocus="this.value=''" class="form-control" id="contact_num" placeholder="Contact Number" name="contact_num" style="width:50%;"></div>
 			    </div>			    
 			</div>
-			<div class="container_black_text">
+			<div class="jumbotron jumbotron-fluid container_black_text">
 				<p class="thick">
 					Please fill the form only when you are sure that you are going to contribute and ensure that the materials will reach the ones who need.
 					In times of crisis we hope to work together in solidarity in order to secure the life of people.
@@ -85,10 +95,10 @@
 				</p>
 			</div>
 			<div class="container">
-				<button type="submit" class="btn btn-default">Submit</button>
+				<button type="submit" class="btn btn-primary">Submit</button>
 			</div>
 		</form>
-
+	</div>
 
 	</body>
 
