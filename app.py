@@ -6,12 +6,12 @@ from oauth2client.service_account import ServiceAccountCredentials
 application = Flask(__name__)
 
 # column number where status is mentioned in the sheet
-request_status_index=6
+request_status_index=4
 # counting from 0
 # when using in sheet, add 1
 
 # column number where benificiary number is mentioned in the sheet
-beneficiary_contact_index=11
+beneficiary_contact_index=9
 # counting from 0
 # when using in sheet, add 1
 
@@ -68,6 +68,7 @@ def get_requests(status):
     
     # skip the first request since it is heading
     for the_request in list_of_requests[1:]:
+        print(the_request[request_status_index])
         
 
         if the_request[request_status_index]==status:
@@ -76,15 +77,15 @@ def get_requests(status):
 
             dict_request["name"]=the_request[1]
             dict_request["contact_num"]=the_request[2]
-            dict_request["lat"]=int(float(the_request[3]))
-            dict_request["lon"]=int(float(the_request[4]))
-            dict_request["requestor_address"]=the_request[5]
-            dict_request["request_status"]=the_request[6]
+            # dict_request["lat"]=int(float(the_request[3]))
+            # dict_request["lon"]=int(float(the_request[4]))
+            dict_request["requestor_address"]=the_request[3]
+            dict_request["request_status"]=the_request[4]
 
-            dict_request["rice_qty"]=the_request[7]
-            dict_request["wheat_qty"]=the_request[8]
-            dict_request["oil_qty"]=the_request[9]
-            dict_request["daal_qty"]=the_request[10]
+            dict_request["rice_qty"]=the_request[5]
+            dict_request["wheat_qty"]=the_request[6]
+            dict_request["oil_qty"]=the_request[7]
+            dict_request["daal_qty"]=the_request[8]
 
             list_requests.append(dict_request)
 
@@ -171,13 +172,14 @@ def add_pending_request():
     name=str(request.form['requestor_name'])
     contact_num=str(request.form['contact_num'])
 
-    lat=str(request.form['mosque_lat'])
-    if lat=="":
-        lat=0
+    # lat=str(request.form['mosque_lat'])
+    # if lat=="":
+    #     lat=0
 
-    lon=str(request.form['mosque_lon'])
-    if lon=="":
-        lon=0
+    # lon=str(request.form['mosque_lon'])
+    # if lon=="":
+    #     lon=0
+
     requestor_address=str(request.form['requestor_address'])
     request_status="Pending"
 
@@ -195,8 +197,8 @@ def add_pending_request():
     data_list.append(name)
     data_list.append(contact_num)
 
-    data_list.append(lat)
-    data_list.append(lon)
+    # data_list.append(lat)
+    # data_list.append(lon)
     data_list.append(requestor_address)   
     data_list.append(request_status) 
 
@@ -209,7 +211,7 @@ def add_pending_request():
 
 
 
-    print(name,lat,lon,contact_num,rice_qty,wheat_qty,oil_qty)
+    print(name,contact_num,rice_qty,wheat_qty,oil_qty)
 
 
 
