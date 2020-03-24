@@ -172,7 +172,12 @@ def add_pending_request():
     contact_num=str(request.form['contact_num'])
 
     lat=str(request.form['mosque_lat'])
+    if lat=="":
+        lat=0
+
     lon=str(request.form['mosque_lon'])
+    if lon=="":
+        lon=0
     requestor_address=str(request.form['requestor_address'])
     request_status="Pending"
 
