@@ -5,6 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
@@ -70,12 +72,24 @@
 			  {% endfor %}
 			  
 			</table>
-			<div class="container">
+			<div class="container_black_text">
 				<div class="form-group">
 			      	<label>Contact Number(10 digit Mobile):</label>
 			      	<input type="text" onfocus="this.value=''" class="form-control" id="contact_num" placeholder="Contact Number" name="contact_num">
-			    </div>
-			    <button type="submit" class="btn btn-default">Submit</button>
+			    </div>			    
+			</div>
+			<div class="container_black_text">
+				<p class="thick">
+					Please fill the form only when you are sure that you are going to contribute and ensure that the materials will reach the ones who need.
+					In times of crisis we hope to work together in solidarity in order to secure the life of people.
+				</p>
+				<p class="normal">
+					If possible, please contact the needy people in this list before submitting the form in order to avoid dupications.
+					
+				</p>
+			</div>
+			<div class="container">
+				<button type="submit" class="btn btn-default">Submit</button>
 			</div>
 		</form>
 
