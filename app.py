@@ -42,6 +42,28 @@ def addneedy():
 
 
 
+def convert_list_to_dict(the_request):
+    dict_request={}
+    dict_request["request_id"]=the_request[0]
+
+    dict_request["name"]=the_request[1]
+    dict_request["contact_num"]=the_request[2]
+    # dict_request["lat"]=int(float(the_request[3]))
+    # dict_request["lon"]=int(float(the_request[4]))
+    dict_request["requestor_address"]=the_request[3]
+    dict_request["request_status"]=the_request[4]
+
+    dict_request["rice_qty"]=the_request[5]
+    dict_request["wheat_qty"]=the_request[6]
+    dict_request["oil_qty"]=the_request[7]
+    dict_request["daal_qty"]=the_request[8]
+    # a gap for beneficiary
+    dict_request["volunteer_name"]=the_request[10]
+    dict_request["vol_contact_num"]=the_request[11]
+
+
+    return dict_request
+
 
 
 def get_requests(status):
@@ -71,20 +93,26 @@ def get_requests(status):
         
 
         if the_request[request_status_index]==status:
-            dict_request={}
-            dict_request["request_id"]=the_request[0]
+            # dict_request={}
+            # dict_request["request_id"]=the_request[0]
 
-            dict_request["name"]=the_request[1]
-            dict_request["contact_num"]=the_request[2]
-            # dict_request["lat"]=int(float(the_request[3]))
-            # dict_request["lon"]=int(float(the_request[4]))
-            dict_request["requestor_address"]=the_request[3]
-            dict_request["request_status"]=the_request[4]
+            # dict_request["name"]=the_request[1]
+            # dict_request["contact_num"]=the_request[2]
+            # # dict_request["lat"]=int(float(the_request[3]))
+            # # dict_request["lon"]=int(float(the_request[4]))
+            # dict_request["requestor_address"]=the_request[3]
+            # dict_request["request_status"]=the_request[4]
 
-            dict_request["rice_qty"]=the_request[5]
-            dict_request["wheat_qty"]=the_request[6]
-            dict_request["oil_qty"]=the_request[7]
-            dict_request["daal_qty"]=the_request[8]
+            # dict_request["rice_qty"]=the_request[5]
+            # dict_request["wheat_qty"]=the_request[6]
+            # dict_request["oil_qty"]=the_request[7]
+            # dict_request["daal_qty"]=the_request[8]
+            # # a gap for beneficiary
+            # dict_request["volunteer_name"]=the_request[10]
+            # dict_request["vol_contact_num"]=the_request[11]
+
+            dict_request=convert_list_to_dict(the_request)
+
 
             list_requests.append(dict_request)
 
@@ -115,22 +143,7 @@ def complete():
     return render_template("completed.html", items=list_requests)    
 
 
-def convert_list_to_dict(the_request):
-    dict_request={}
-    dict_request["request_id"]=the_request[0]
 
-    dict_request["name"]=the_request[1]
-    dict_request["contact_num"]=the_request[2]
-    # dict_request["lat"]=int(float(the_request[3]))
-    # dict_request["lon"]=int(float(the_request[4]))
-    dict_request["requestor_address"]=the_request[3]
-    dict_request["request_status"]=the_request[4]
-
-    dict_request["rice_qty"]=the_request[5]
-    dict_request["wheat_qty"]=the_request[6]
-    dict_request["oil_qty"]=the_request[7]
-    dict_request["daal_qty"]=the_request[8]
-    return dict_request
 
 @application.route('/checkout',methods=["POST"])
 def checkout():
@@ -180,6 +193,9 @@ def checkout():
             # first create a dict out of the row
 
             dict_request=convert_list_to_dict(the_request)
+
+
+
 
             
 
@@ -243,7 +259,7 @@ def complete_payment():
 
         return "Thanks for helping out."
     else:
-        return "Some issue with your OTP, please check out again"
+        return "Some issue with your OTP, please go back and check out again"
 
 
 
@@ -295,7 +311,10 @@ def add_pending_request():
     request_status="Pending"
 
     # here get approx location from lat long
-    approx_location="Home"
+    
+    volunteer_name=str(request.form['volunteer_name'])
+    vol_contact_num=str(request.form['vol_contact_num'])
+    
     
 
     rice_qty=str(request.form['rice_qty'])
@@ -317,8 +336,11 @@ def add_pending_request():
     data_list.append(wheat_qty)
     data_list.append(oil_qty)
     data_list.append(daal_qty)
+    data_list.append("")
+    # above is for benificiary contact_num
+    data_list.append(volunteer_name)
+    data_list.append(vol_contact_num)
 
-    
 
 
 
