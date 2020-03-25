@@ -2,6 +2,11 @@ from flask import Flask, render_template, request,send_from_directory, jsonify, 
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
+import sys
+sys.path.insert(0,'util/')
+# from filename import function
+from otp_gen import get_otp
+
 
 application = Flask(__name__)
 
@@ -14,6 +19,10 @@ request_status_index=4
 beneficiary_contact_index=9
 # counting from 0
 # when using in sheet, add 1
+
+
+
+
 
 
 @application.route('/')
@@ -224,6 +233,7 @@ def add_pending_request():
 
 if __name__ == "__main__":
     
+    print(get_otp("8867447967"))
     application.run(debug=True)
 
 
