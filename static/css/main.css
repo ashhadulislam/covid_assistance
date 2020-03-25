@@ -15,6 +15,7 @@ html, body{
 header{
   display:flex;
   flex-direction: column;
+  flex-wrap: wrap;
   color:#fff;
 }
 .clearfix{
@@ -31,12 +32,12 @@ header{
    color:#fff;
  }
 nav{
-  padding: 20px 10%;
+  padding: 20px 8%;
   position: relative;
   text-align: center ;
 }
 nav a{
-  
+  font-size: larger;
   text-decoration:none;
   align-content: center;
   padding: 15px 20px;
@@ -46,10 +47,7 @@ nav a{
   margin: 0;
   padding: 0;
 }
-.head-container a:hover{
-  color:#00c8c8;
-  
-}
+
 nav a:hover{
   color:#3f3f3f;
  
@@ -82,38 +80,12 @@ nav a:hover{
   padding:5px 10px;
   text-align:center;
 }
-.head-container > nav > ul > .hover-card{
-  flex-direction: column;
-  padding:5px 10px;
-  text-align:center;
-}
-.head-container > .left{
-  float:left;
-}
-.left{
-  float:left;
-}
-nav a span{
-  display: inline;
-  margin: 10px 0;
-}
 
 
-nav >a{
-  display:inline;
-}
-
-.blue ul li{
-  margin-bottom: 0;
-}
 @media (min-width: 992px) {
   .section-container ul li{
       margin-bottom: 0;
   }
-}
-
-.center{
-  text-align: center ;
 }
 
 .logo{
@@ -173,6 +145,10 @@ main{
   flex-direction:column;
 
 }
+.txt-up{
+  
+  display: flex;
+}
 .blue-txt{
   color:#486899;
 }
@@ -212,10 +188,10 @@ strong{
   line-height: 0.5 em;
 }
 .text-content > h4{
-  font-size:15px;
+  font-size:18px;
 }
 .text-content > p{
-  font-size:10px;
+  font-size:15px;
 }
 .section2{
   display: flex;
@@ -235,6 +211,15 @@ strong{
   background-color: #fff;
   border:2px solid #eee;
 
+}
+.card2{
+  background-image: linear-gradient(#f7f7f7, #464040, #afc0cc);
+  width: 100%;
+  padding: 20px 25%;
+  color: #fff;
+}
+.center{
+  text-align: center;
 }
 .card1 > div {
   padding: 20px;
@@ -290,26 +275,29 @@ strong{
 .black{
   color:black;
 }
-.top1{
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
-  height:500px;
-}
 
-.center{
-  text-align:center;
-}
 
+.txt-up{
+    background-image:url('/static/imgs/background.png');
+    height: 100vh;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    padding:20px 0px;
+    
+  
+}
 .light{
   background-color: #ddd8d8;
 }
 .section-banner{
-  display:flex;
-  padding:10px 10%;
-  flex-direction: column;
-  justify-content: flex-start;
+  height: 300px;
+  padding: 100px;
+  margin: 100px;
 
 }
 
@@ -327,122 +315,17 @@ strong{
   cursor: pointer;
   display: inline-block;
 }
-.btn-bordered{
-  background: transparent;
-  border: 2px solid #747474;
-}
-.btn-small-circle{
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #333;
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  padding: 0;
-  margin-right: 7px;
-}
-.btn-small-circle:hover{
-  background-color: #00c8c8;
-  border-color: #00c8c8;
-  transition: all 300ms ease;
-}
-.left{
-  text-align: left;
-}
 
-.btn-small-circle:hover{
-  background-color: #00c8c8;
-  border-color: #00c8c8;
-  transition: all 300ms ease;
-}
-.left{
-  text-align: left;
-}
-
-.btn-shop{
-  width: 50%;
-  position: absolute;
-  bottom: 20px;
-  left: 25%;
-}
-
-.top1{
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
-  height:500px;
-}
-
-.center{
-  text-align:center;
-}
 
 .light{
   background-color: #ddd8d8;
 }
-.section-banner{
-  display:flex;
-  padding:10px 10%;
-  flex-direction: column;
-  justify-content: flex-start;
 
-}
-
-.form-table{
-  display:flex;
-  flex-direction:row;
-  padding:20px 10%;
-  justify-content: space-between;
-}
-
-form{
-
-  width:49%;
-}
-
-.inline-block{
-  margin-left:5px;
-
-  width:42%;
-  display:inline-block;
-}
-.block{
-  padding:5px;
-  width:90%;
-  overflow: hidden;
-  display:block;
-}
-.bottom-line::after{
-  display:block;
-  content:" ";
-  height:2px;
-  width:250px;
-  background-image:linear-gradient(to right,#ccc6c6,#ccc6c6);
-}
-form > div{
-  padding:5px;
-}
 .space::before{
   margin-left:5px;
 }
 .black{
   color:black;
-}
-
-
-.table-wraper{
-  width:49%;
-  display:flex;
-  flex-direction: column;
-  
-
-}
-
-.table-wraper > .table1> ul{
-  display:block;
-  background-color: #f0e8e8;
-  width:100%;
 }
 @media (max-width: 576px){
   
@@ -479,15 +362,7 @@ form > div{
 .bg-grey{
   background-color: #f7f7f7;
 }
-.ico-circle{
-  padding: 16px;
-  color:#3f3f3f;
-  background-color:transparent;
-  border-radius: 35px;
-  display: inline-block;
-  font-size: 15px;
-  margin-right: 7px;
-}
+
 *{
   font-family: 'RobotoSlab','Oswald';
 }

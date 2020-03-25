@@ -26,6 +26,9 @@ def show_home():
 def addneedy():    
     return render_template('addneedy.html')
 
+@application.route('/contact')
+def contact():    
+    return render_template('contact.html')
 
 
 def get_sheet():
@@ -138,7 +141,7 @@ def mark_as_complete():
             sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
         row_count+=1
 
-    return "Thanks for helping out."
+    return render_template('thank-you.html')
 
 
 
