@@ -235,7 +235,7 @@ def insert_into_gsheet(data_list):
     rice_qty, wheat_qty, oil_qty, daal_qty,
     request_status
     '''
-    sheet=get_sheet()
+    sheet=get_sheet("Details_People")
     
     row = data_list
     index = len(sheet.get_all_values())+1
