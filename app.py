@@ -218,7 +218,7 @@ def add_pending_request():
     
     insert_into_gsheet(data_list)
 
-    return render_template('addneedy.html')
+    return render_template('base.html')
 
 
 
