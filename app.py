@@ -28,7 +28,7 @@ def addneedy():
 
 
 
-def get_sheet():
+def get_sheet(sheetname):
     # use creds to create a client to interact with the Google Drive API
     scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 
@@ -39,7 +39,7 @@ def get_sheet():
     client = gspread.authorize(creds)
     # Find a workbook by name and open the first sheet
     # Make sure you use the right name here.
-    sheet = client.open("Details_People").sheet1
+    sheet = client.open(sheetname).sheet1
     return sheet
 
 
@@ -53,12 +53,12 @@ def get_requests(status):
     request_status
     '''
 
-    sheet=get_sheet()
+    if status=="Completed":
+        sheetname="Daily_Completed"
+    elif status=="Pending":
+        sheetname="Details_People"
 
-
-
-    
-
+    sheet=get_sheet(sheetname)
     list_of_requests=(sheet.get_all_values())
     print("number of rows ",len(sheet.get_all_values()))
     print("number of columns ",len(sheet.get_all_values()[0]))
