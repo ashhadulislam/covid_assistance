@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request,send_from_directory, jsonify, url_for
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+# import gspread
+# from oauth2client.service_account import ServiceAccountCredentials
 
 import sys
 sys.path.insert(0,'util/')
 # from filename import function
-from otp_gen import get_otp
 
+from send_otp import send_otp_sms
+from validate_phone import validate_phone
+
+from read_sheet import get_sheet
 
 application = Flask(__name__)
 
@@ -37,19 +40,6 @@ def addneedy():
 
 
 
-def get_sheet(sheetname):
-    # use creds to create a client to interact with the Google Drive API
-    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
-
-    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-    print(creds)
-    print(type(creds))
-    # print(creds)
-    client = gspread.authorize(creds)
-    # Find a workbook by name and open the first sheet
-    # Make sure you use the right name here.
-    sheet = client.open(sheetname).sheet1
-    return sheet
 
 
 
@@ -124,8 +114,26 @@ def complete():
 
     return render_template("completed.html", items=list_requests)    
 
-@application.route('/mark_as_complete',methods=["POST"])
-def mark_as_complete():
+
+def convert_list_to_dict(the_request):
+    dict_request={}
+    dict_request["request_id"]=the_request[0]
+
+    dict_request["name"]=the_request[1]
+    dict_request["contact_num"]=the_request[2]
+    # dict_request["lat"]=int(float(the_request[3]))
+    # dict_request["lon"]=int(float(the_request[4]))
+    dict_request["requestor_address"]=the_request[3]
+    dict_request["request_status"]=the_request[4]
+
+    dict_request["rice_qty"]=the_request[5]
+    dict_request["wheat_qty"]=the_request[6]
+    dict_request["oil_qty"]=the_request[7]
+    dict_request["daal_qty"]=the_request[8]
+    return dict_request
+
+@application.route('/checkout',methods=["POST"])
+def checkout():
 
     list_ids_to_mark_complete=[]
     print(request.form.keys)
@@ -139,15 +147,84 @@ def mark_as_complete():
     sheet=get_sheet("Details_People")
     list_of_requests=(sheet.get_all_values())
 
+    list_to_be_fulfilled=[]
+
     row_count=2
     for the_request in list_of_requests[1:]:
-
         if int(float(the_request[0])) in list_ids_to_mark_complete:
-            sheet.update_cell(row_count, request_status_index+1, "Completed")
-            sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
+            # first create a dict out of the row
+
+            dict_request=convert_list_to_dict(the_request)
+
+            
+
+            list_to_be_fulfilled.append(dict_request)
+            # sheet.update_cell(row_count, request_status_index+1, "Completed")
+            # sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
         row_count+=1
 
-    return "Thanks for helping out."
+    print(list_to_be_fulfilled)
+    dict_order={"contributor_number":str(benificiary_contact),"order":list_to_be_fulfilled}
+
+    # now generate the otp    
+    return_str=send_otp_sms(str(benificiary_contact).strip())
+    dict_order["return_message"]=return_str
+
+    
+    return render_template("otp_payment.html", items=dict_order)    
+
+
+
+
+
+
+@application.route('/complete_payment',methods=["POST"])
+def complete_payment():
+    list_ids_to_mark_complete=[]
+    print(request.form.keys)
+    for key,val in request.form.items():
+        print(key)
+        if key!="contact_num" and key!="otp_num" and key!="return_message":
+            list_ids_to_mark_complete.append(int(float(val)))
+    print(list_ids_to_mark_complete)
+    benificiary_contact=request.form['contact_num']
+    otp_num=request.form['otp_num']
+
+    # now to check if otp matches with the otp mentioned in the sheet
+    # also check for expired otp
+
+    is_valid=validate_phone(benificiary_contact,otp_num)
+
+    if is_valid:
+        # mark as complete
+
+        sheet=get_sheet("Details_People")
+        list_of_requests=(sheet.get_all_values())
+
+        list_to_be_fulfilled=[]
+
+        row_count=2
+
+
+        # we'll check if the request ids match
+        for the_request in list_of_requests[1:]:
+            if int(float(the_request[0])) in list_ids_to_mark_complete:            
+                sheet.update_cell(row_count, request_status_index+1, "Completed")
+                sheet.update_cell(row_count, beneficiary_contact_index+1,
+                 str(benificiary_contact))
+            row_count+=1
+
+
+
+        return "Thanks for helping out."
+    else:
+        return "Some issue with your OTP, please check out again"
+
+
+
+
+
+
 
 
 
@@ -233,7 +310,7 @@ def add_pending_request():
 
 if __name__ == "__main__":
     
-    print(get_otp("8867447967"))
+    
     application.run(debug=True)
 
 

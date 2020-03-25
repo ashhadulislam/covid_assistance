@@ -42,7 +42,7 @@
 
 	<body>
        <div class='container'>
-		<form action="/checkout" method="post" enctype="multipart/form-data">
+		<form action="/complete_payment" method="post" enctype="multipart/form-data">
 			<table>
 			  <tr>
 			  	<th>Request ID</th>
@@ -54,12 +54,14 @@
 			    <th>Wheat Quantity</th>
 			    <th>Oil Quantity</th>
 			    <th>Daal Quantity</th>
-			    <th>Place Order</th>
+			    <!-- <th>Place Order</th> -->
 			  </tr>
 			  
-			  {% for item in items %}		  
+			  {% for item in items.order %}		  
 			  <tr>
-			  	<td>{{item.request_id}}</td>
+			  	<td>
+			  		<input type="text" id="name"
+			  		name={{item.request_id}} value={{item.request_id}} readonly></td>
 			  	<td>{{item.name}}</td>
 			  	<td>{{item.contact_num}}</td>			  	
 			  	<td>{{item.requestor_address}}</td>
@@ -69,9 +71,9 @@
 			  	<td>{{item.wheat_qty}}</td>
 			  	<td>{{item.oil_qty}}</td>
 			  	<td>{{item.daal_qty}}</td>
-		  	 	<td>
-		  	 		<input type="checkbox" id="request_number" name={{item.request_id}} value={{item.request_id}}>
-		  	 	</td>
+		  	 	<!-- <td>
+		  	 		<input type="checkbox" id="request_number" name={{item.request_id}} checked value={{item.request_id}} readonly>
+		  	 	</td> -->
 			  </tr>
 			  {% endfor %}
 			  
@@ -81,10 +83,29 @@
 				<div class="form-group" >
 					<div class ="row"> <label>Contact Number(10 digit Mobile):</label> </div>
 					 
-			      	<div class = "row"><input type="text" onfocus="this.value=''" class="form-control" id="contact_num" placeholder="Contact Number" name="contact_num" style="width:50%;"></div>
+			      	<div class = "row"><input type="text" class="form-control" id="contact_num" name="contact_num" value="{{items.contributor_number}}" style="width:50%;"></div>
 			    </div>			    
 			</div>
-			<div class="jumbotron jumbotron-fluid container_black_text">
+
+
+			<div class="container_black_text" style = "justify-content: center;margin-top: 10px;">
+				<div class="form-group" >									 
+			      	<div class = "row"><textarea class="form-control" id="message" name="return_message" style="width:50%;">{{items.return_message}}</textarea></div>
+			    </div>			    
+			</div>
+
+
+
+			<div class="container_black_text" style = "justify-content: center;margin-top: 10px;">
+				<div class="form-group" >
+					<div class ="row"> <label>Enter OTP:</label> </div>
+					 
+			      	<div class = "row"><input type="text" class="form-control" id="otp_num" name="otp_num" style="width:50%;"></div>
+			    </div>			    
+			</div>
+
+
+			<!-- <div class="jumbotron jumbotron-fluid container_black_text">
 				<p class="thick">
 					Please fill the form only when you are sure that you are going to contribute and ensure that the materials will reach the ones who need.
 					In times of crisis we hope to work together in solidarity in order to secure the life of people.
@@ -95,9 +116,9 @@
 				<p class="normal">
 					Please rest assured that your contact details will not be shared outside.
 				</p>
-			</div>
+			</div> -->
 			<div class="container">
-				<button type="submit" class="btn btn-primary">Check Out</button>
+				<button type="submit" class="btn btn-primary">Submit</button>
 			</div>
 		</form>
 	</div>

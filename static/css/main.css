@@ -76,3 +76,6 @@ p.thin_small_caps {
 }
 
 
+input[type="checkbox"][readonly] {
+  pointer-events: none;
+}
