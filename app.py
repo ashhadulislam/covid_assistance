@@ -1,7 +1,15 @@
 from flask import Flask, render_template, request,send_from_directory, jsonify, url_for
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+# import gspread
+# from oauth2client.service_account import ServiceAccountCredentials
 
+import sys
+sys.path.insert(0,'util/')
+# from filename import function
+
+from send_otp import send_otp_sms
+from validate_phone import validate_phone
+
+from read_sheet import get_sheet
 
 application = Flask(__name__)
 
@@ -14,6 +22,10 @@ request_status_index=4
 beneficiary_contact_index=9
 # counting from 0
 # when using in sheet, add 1
+
+
+
+
 
 
 @application.route('/')
@@ -31,20 +43,29 @@ def contact():
     return render_template('contact.html')
 
 
-def get_sheet():
-    # use creds to create a client to interact with the Google Drive API
-    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/drive']
 
-    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-    print(creds)
-    print(type(creds))
-    # print(creds)
-    client = gspread.authorize(creds)
-    # Find a workbook by name and open the first sheet
-    # Make sure you use the right name here.
-    sheet = client.open("Details_People").sheet1
-    return sheet
 
+def convert_list_to_dict(the_request):
+    dict_request={}
+    dict_request["request_id"]=the_request[0]
+
+    dict_request["name"]=the_request[1]
+    dict_request["contact_num"]=the_request[2]
+    # dict_request["lat"]=int(float(the_request[3]))
+    # dict_request["lon"]=int(float(the_request[4]))
+    dict_request["requestor_address"]=the_request[3]
+    dict_request["request_status"]=the_request[4]
+
+    dict_request["rice_qty"]=the_request[5]
+    dict_request["wheat_qty"]=the_request[6]
+    dict_request["oil_qty"]=the_request[7]
+    dict_request["daal_qty"]=the_request[8]
+    # a gap for beneficiary
+    dict_request["volunteer_name"]=the_request[10]
+    dict_request["vol_contact_num"]=the_request[11]
+
+
+    return dict_request
 
 
 
@@ -56,12 +77,12 @@ def get_requests(status):
     request_status
     '''
 
-    sheet=get_sheet()
+    if status=="Completed":
+        sheetname="Daily_Completed"
+    elif status=="Pending":
+        sheetname="Details_People"
 
-
-
-    
-
+    sheet=get_sheet(sheetname)
     list_of_requests=(sheet.get_all_values())
     print("number of rows ",len(sheet.get_all_values()))
     print("number of columns ",len(sheet.get_all_values()[0]))
@@ -75,20 +96,26 @@ def get_requests(status):
         
 
         if the_request[request_status_index]==status:
-            dict_request={}
-            dict_request["request_id"]=the_request[0]
+            # dict_request={}
+            # dict_request["request_id"]=the_request[0]
 
-            dict_request["name"]=the_request[1]
-            dict_request["contact_num"]=the_request[2]
-            # dict_request["lat"]=int(float(the_request[3]))
-            # dict_request["lon"]=int(float(the_request[4]))
-            dict_request["requestor_address"]=the_request[3]
-            dict_request["request_status"]=the_request[4]
+            # dict_request["name"]=the_request[1]
+            # dict_request["contact_num"]=the_request[2]
+            # # dict_request["lat"]=int(float(the_request[3]))
+            # # dict_request["lon"]=int(float(the_request[4]))
+            # dict_request["requestor_address"]=the_request[3]
+            # dict_request["request_status"]=the_request[4]
 
-            dict_request["rice_qty"]=the_request[5]
-            dict_request["wheat_qty"]=the_request[6]
-            dict_request["oil_qty"]=the_request[7]
-            dict_request["daal_qty"]=the_request[8]
+            # dict_request["rice_qty"]=the_request[5]
+            # dict_request["wheat_qty"]=the_request[6]
+            # dict_request["oil_qty"]=the_request[7]
+            # dict_request["daal_qty"]=the_request[8]
+            # # a gap for beneficiary
+            # dict_request["volunteer_name"]=the_request[10]
+            # dict_request["vol_contact_num"]=the_request[11]
+
+            dict_request=convert_list_to_dict(the_request)
+
 
             list_requests.append(dict_request)
 
@@ -118,8 +145,11 @@ def complete():
 
     return render_template("completed.html", items=list_requests)    
 
-@application.route('/mark_as_complete',methods=["POST"])
-def mark_as_complete():
+
+
+
+@application.route('/checkout',methods=["POST"])
+def checkout():
 
     list_ids_to_mark_complete=[]
     print(request.form.keys)
@@ -130,18 +160,115 @@ def mark_as_complete():
     print(list_ids_to_mark_complete)
     benificiary_contact=request.form['contact_num']
 
-    sheet=get_sheet()
+    # some form validation here
+
+    mobile_issue=False
+    if benificiary_contact=="":
+        mobile_issue=True
+    
+    if not benificiary_contact.isdecimal():
+        mobile_issue=True
+
+    if len(benificiary_contact)!=10:
+        mobile_issue=True
+
+    if mobile_issue:
+        return "Please retry with proper mobile number"
+
+
+
+
+    
+
+    if len(list_ids_to_mark_complete)==0:
+        return "Please go back and click on the check boxes \
+        to select the requirements you want to fulfill."
+
+
+    sheet=get_sheet("Details_People")
     list_of_requests=(sheet.get_all_values())
+
+    list_to_be_fulfilled=[]
 
     row_count=2
     for the_request in list_of_requests[1:]:
-
         if int(float(the_request[0])) in list_ids_to_mark_complete:
-            sheet.update_cell(row_count, request_status_index+1, "Completed")
-            sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
+            # first create a dict out of the row
+
+            dict_request=convert_list_to_dict(the_request)
+
+
+
+
+            
+
+            list_to_be_fulfilled.append(dict_request)
+            # sheet.update_cell(row_count, request_status_index+1, "Completed")
+            # sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
         row_count+=1
 
-    return render_template('thank-you.html')
+    print(list_to_be_fulfilled)
+    dict_order={"contributor_number":str(benificiary_contact),"order":list_to_be_fulfilled}
+
+    # now generate the otp    
+    return_str=send_otp_sms(str(benificiary_contact).strip())
+    dict_order["return_message"]=return_str
+
+    
+    return render_template("otp_payment.html", items=dict_order)    
+
+
+
+
+
+
+@application.route('/complete_payment',methods=["POST"])
+def complete_payment():
+    list_ids_to_mark_complete=[]
+    print(request.form.keys)
+    for key,val in request.form.items():
+        print(key)
+        if key!="contact_num" and key!="otp_num" and key!="return_message":
+            list_ids_to_mark_complete.append(int(float(val)))
+    print(list_ids_to_mark_complete)
+    benificiary_contact=request.form['contact_num']
+    otp_num=request.form['otp_num']
+
+    # now to check if otp matches with the otp mentioned in the sheet
+    # also check for expired otp
+
+    is_valid=validate_phone(benificiary_contact,otp_num)
+
+    if is_valid:
+        # mark as complete
+
+        sheet=get_sheet("Details_People")
+        list_of_requests=(sheet.get_all_values())
+
+        list_to_be_fulfilled=[]
+
+        row_count=2
+
+
+        # we'll check if the request ids match
+        for the_request in list_of_requests[1:]:
+            if int(float(the_request[0])) in list_ids_to_mark_complete:            
+                sheet.update_cell(row_count, request_status_index+1, "Completed")
+                sheet.update_cell(row_count, beneficiary_contact_index+1,
+                 str(benificiary_contact))
+            row_count+=1
+
+
+
+        return render_template('thank-you.html')
+    else:
+        return "Some issue with your OTP, please go back and check out again"
+
+
+
+
+
+
 
 
 
@@ -152,7 +279,7 @@ def insert_into_gsheet(data_list):
     rice_qty, wheat_qty, oil_qty, daal_qty,
     request_status
     '''
-    sheet=get_sheet()
+    sheet=get_sheet("Details_People")
     
     row = data_list
     index = len(sheet.get_all_values())+1
@@ -187,7 +314,10 @@ def add_pending_request():
     request_status="Pending"
 
     # here get approx location from lat long
-    approx_location="Home"
+    
+    volunteer_name=str(request.form['volunteer_name'])
+    vol_contact_num=str(request.form['vol_contact_num'])
+    
     
 
     rice_qty=str(request.form['rice_qty'])
@@ -209,8 +339,11 @@ def add_pending_request():
     data_list.append(wheat_qty)
     data_list.append(oil_qty)
     data_list.append(daal_qty)
+    data_list.append("")
+    # above is for benificiary contact_num
+    data_list.append(volunteer_name)
+    data_list.append(vol_contact_num)
 
-    
 
 
 
@@ -221,11 +354,12 @@ def add_pending_request():
     
     insert_into_gsheet(data_list)
 
-    return "Thanks for requesting. We will get back to you soon."
+    return render_template('base.html')
 
 
 
 if __name__ == "__main__":
+    
     
     application.run(debug=True)
 
