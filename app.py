@@ -144,6 +144,31 @@ def checkout():
     print(list_ids_to_mark_complete)
     benificiary_contact=request.form['contact_num']
 
+    # some form validation here
+
+    mobile_issue=False
+    if benificiary_contact=="":
+        mobile_issue=True
+    
+    if not benificiary_contact.isdecimal():
+        mobile_issue=True
+
+    if len(benificiary_contact)!=10:
+        mobile_issue=True
+
+    if mobile_issue:
+        return "Please retry with proper mobile number"
+
+
+
+
+    
+
+    if len(list_ids_to_mark_complete)==0:
+        return "Please go back and click on the check boxes \
+        to select the requirements you want to fulfill."
+
+
     sheet=get_sheet("Details_People")
     list_of_requests=(sheet.get_all_values())
 
