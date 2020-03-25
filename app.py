@@ -127,7 +127,7 @@ def mark_as_complete():
     print(list_ids_to_mark_complete)
     benificiary_contact=request.form['contact_num']
 
-    sheet=get_sheet()
+    sheet=get_sheet("Details_People")
     list_of_requests=(sheet.get_all_values())
 
     row_count=2
