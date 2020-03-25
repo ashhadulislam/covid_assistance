@@ -304,7 +304,7 @@ def add_pending_request():
     
     insert_into_gsheet(data_list)
 
-    return "Thanks for requesting. We will get back to you soon."
+    return render_template('base.html')
 
 
 
