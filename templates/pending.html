@@ -41,9 +41,26 @@
 		
 
 	<body>
+
+
+
+		<div class="container">
+		<!-- <div class="section2"> -->
+			<div style="float:left;">
+				<input type="text" id="myStateInput" onkeyup="myStateFunction()" placeholder="Search for state.." title="Type in a state">
+			</div>
+			<div style="float:left;">
+				<input type="text" id="myDistrictInput" onkeyup="myDistrictFunction()" placeholder="Search for district.." title="Type in a district">
+			</div>
+		</div>
+
+
+		
+
+
        <div class='container'>
 		<form action="/checkout" method="post" enctype="multipart/form-data">
-			<table>
+			<table id="pendingTable">
 			  <tr>
 			  	<th>Request ID</th>
 			    <th>Name</th>
@@ -114,6 +131,49 @@
 			</div>
 		</form>
 	</div>
+
+
+	<script>
+		function myStateFunction() {
+		  var input, filter, table, tr, td, i, txtValue;
+		  input = document.getElementById("myStateInput");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("pendingTable");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[3];
+		    if (td) {
+		      txtValue = td.textContent || td.innerText;
+		      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+		</script>
+
+		<script>
+		function myDistrictFunction() {
+		  var input, filter, table, tr, td, i, txtValue;
+		  input = document.getElementById("myDistrictInput");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("pendingTable");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[4];
+		    if (td) {
+		      txtValue = td.textContent || td.innerText;
+		      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+		</script>
 
 	</body>
 
