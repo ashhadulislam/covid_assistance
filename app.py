@@ -64,6 +64,9 @@ def convert_list_to_dict(the_request):
     dict_request["volunteer_name"]=the_request[10]
     dict_request["vol_contact_num"]=the_request[11]
 
+    dict_request["requestor_state"]=the_request[12]
+    dict_request["requestor_district"]=the_request[13]
+
 
     return dict_request
 
@@ -311,6 +314,9 @@ def add_pending_request():
     #     lon=0
 
     requestor_address=str(request.form['requestor_address'])
+    requestor_state=str(request.form['requestor_state'])
+    requestor_district=str(request.form['requestor_district'])
+
     request_status="Pending"
 
     # here get approx location from lat long
@@ -324,6 +330,8 @@ def add_pending_request():
     wheat_qty=str(request.form['wheat_qty'])
     oil_qty=str(request.form['oil_qty'])
     daal_qty=str(request.form['daal_qty'])
+
+    print(requestor_state,requestor_district)
 
     
 
@@ -343,6 +351,9 @@ def add_pending_request():
     # above is for benificiary contact_num
     data_list.append(volunteer_name)
     data_list.append(vol_contact_num)
+
+    data_list.append(requestor_state)
+    data_list.append(requestor_district)
 
 
 
