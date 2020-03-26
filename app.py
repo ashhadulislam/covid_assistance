@@ -38,6 +38,9 @@ def show_home():
 def addneedy():    
     return render_template('addneedy.html')
 
+@application.route('/contact')
+def contact():    
+    return render_template('contact.html')
 
 
 
@@ -257,7 +260,7 @@ def complete_payment():
 
 
 
-        return "Thanks for helping out."
+        return render_template('thank-you.html')
     else:
         return "Some issue with your OTP, please go back and check out again"
 
