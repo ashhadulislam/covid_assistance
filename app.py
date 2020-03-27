@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request,send_from_directory, jsonify, url_for
+
 # import gspread
 # from oauth2client.service_account import ServiceAccountCredentials
 
-import sys
-sys.path.insert(0,'util/')
+# import sys
+# sys.path.insert(0,'util/')
 # from filename import function
-
+    
 from send_otp import send_otp_sms
 from validate_phone import validate_phone
 
@@ -248,7 +249,7 @@ def complete_payment():
         sheet=get_sheet("Details_People")
         list_of_requests=(sheet.get_all_values())
 
-        list_to_be_fulfilled=[]
+        # list_to_be_fulfilled=[]
 
         row_count=2
 

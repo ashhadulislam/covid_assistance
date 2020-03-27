@@ -37,10 +37,10 @@ def send_otp_sms(user_phone):
 	for otp_record in otp_records[1:]:
 		# number match
 		if user_phone==otp_record[number_index-1]:
-			return_str="OTP has been already sent. Please wait 3 minutes before re-generating"
+			return_str="OTP has been already sent. Please wait 3 minutes before re generating"
 			number_exists=True
 			user_otp=otp_record[otp_index-1]
-			print("Otp already here, let's check the time")
+			print("Otp already here, lets check the time")
 			otp_gen_time=int(otp_record[time_index-1])
 			print("Otp was generated at ",otp_gen_time)
 			# get the current time
