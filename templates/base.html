@@ -2,79 +2,173 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="theme-color" content="#ffffff"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,600,700,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/demo.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/material-kit.css') }}">
 	
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+  <style>
+
+    body{
+        overflow-x: hidden;
+    }
+
+
+    #buttons {
+    background-color: rgb(9, 13, 20)!important;
+    color: rgb(241, 210, 116)!important;
+    border-radius: 4px;
+    }
+
+
+    .img-fluid
+    {
+        border-radius: 5px 5px;
+    }
+
+    </style>
 </head>
 	
 
-<body>
-  <header class="clearfix blue small-txt">
-    <div class="head-container">
-    <div class=" logo-container">
-        <img class="img-logo" src="{{url_for('static', filename='imgs/logo.png')}}" alt="logo" title="FusionCharts">
+<body class="landing-page">
+  <nav class="navbar navbar-color-on-scroll navbar-transparent fixed-top  navbar-expand-lg " color-on-scroll="100" id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="/"><span id="gdg-logo">Help For Hind</span></a>
+            <button style="color:rgb(120,120,120)" class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="dropdown nav-item">
+                    <a href="{{ url_for('addneedy') }}" data-page="index" class="nav-link">
+                        <span><b>Add Needy</b></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('pending') }}" data-page="events" class="nav-link">
+                        <span><b id="header_text">Contribute</b></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('complete') }}" data-page="resources" class="nav-link">
+                        <span><b id="header_text">Check Completed</b></span>
+                    </a>
+                </li>
+                  <li class="nav-item">
+                      <a target="blank" class="nav-link"href="{{ url_for('contact') }}">
+                          <span class="btn" id="buttons"><span id="header_text">Contact Us</span></span>
+                      </a>
+                  </li>
+            </ul>
+        </div>
     </div>
-    <nav>
-      <ul>
-        <li><a href="{{ url_for('addneedy') }}">Add Needy</a></li>
-        <li><a href="{{ url_for('pending') }}">Contribute</a></li>
-        <li><a href="{{ url_for('complete') }}">Check Completed list</a></li>
-        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
-      </ul>
-    </nav>
-  </div>
-  </header>
-  <main>
-    <div class="section1 white-txt">
-      <!-- <img src="{{url_for('static', filename='imgs/background.png')}}" alt="Bground" style="width:100%; height: 100vh; position: absolute;"> -->
-      <div class="text-wrap">
+</nav>
+<div class="page-header header-filter" data-parallax="true" style="height: 100px;">
+</div>
+
+
+
+<div class="main">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <br/><br/>      <br/>
         <h1><strong>Rashan Le Liya?</strong></h1>
         <span class="big">But <strong>What about them?</strong></span>
-        <p>
+        <h5>
           Just looking outside my window, I see distressed,hunger stricken , daily earners, rickshawallas and safaai walas waiting for some miracle to happen.
           They do not have any means to buy food, or even if they had means , do not have the medium as most grocery stores in their area are out of stock!      
-        </p>
-        <p>
+        </h5>
+        <h5>
           People with MEANS and INTENT can both come forward!
-        </p>
+        </h5>
+        
+                    <p>
+                        <a target="blank" href="{{ url_for('pending') }}">
+                            <button class="btn btn-primary" id="buttons">Contribute</button></a>
+                    </p> 
+      </div>
+      <div class="col-lg-6">
+        <br/><br/><br/><br/>
+        <img src="https://images.unsplash.com/photo-1548686969-6909da50a169?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=735&q=80" class="img-fluid"/>
+        <!--<img class="img-fluid" src="{{url_for('static', filename='imgs/background.png')}}" alt="Bground">-->
       </div>
     </div>
-    <div class="section section2 bg-grey">
-      <div class="card1">
-        <div>       
-          <span>Please identify people who need rations using the People need help and add them</span>  
-          <a href="{{ url_for('addneedy') }}" class="blue btn-center">People Need Help</a>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card">
+         <div class="card-body">  
+           <p>&nbsp;</p>     
+            <h5>Please identify people who need rations using the People need help and add them.</h5>  
+            <br/>
+            <p>
+              <a target="blank" href="{{ url_for('addneedy') }}">
+                  <button class="btn btn-primary" id="buttons">People need help</button></a>
+          </p> 
+          </div>
         </div>
       </div>
-      <div class ="card1">
-        <div >
-            <span>If you want to contribute , please click on the contribute button and help the needy people out.</span>   
-            <a href="{{ url_for('pending') }}" class="blue btn-center">Contribute</a>
-        </div>
-      </div>
-      </div>
-  </main>
-  <div class="card2 center">
-    <div>
-      <h3><span class="fa fa-quote-left"></span>They Can't afford the SHUT DOWN. They can't stock-up the essentials as they live and earn daily. Open your heart, Extend your arms.Help the NEEDY<span class="fa fa-quote-right"></span></h3>
-    </div>
-  </div>
-  <div class="flex-wrap center white" style="background:transparent">
-    <a href="https://www.facebook.com/Help-for-Hind-109297054048102/"><span class="ico-circle fa fa-facebook-f"></span></a>
-  </div>
-<footer class="center blue small-txt">
-  Copyrights &copy; 2019 All rights reserved to Help for Hind
-</footer>
-	<!-- <p><a href="{{ url_for('pending') }}">Check pending</a></p> -->
-	
 
+      <div class="col-lg-6">
+        <div class="card">
+         <div class="card-body">  
+           <p>&nbsp;</p>     
+            <h5>If you want to contribute , please click on the contribute button and help the needy people out.</h5>  
+            <br/>
+            <p>
+              <a target="blank" href="{{ url_for('pending') }}">
+                  <button class="btn btn-primary" id="buttons">Contribute</button></a>
+          </p> 
+          </div>
+        </div>
+      </div>
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+      <div class="row">
+        <div class="col-lg-3">
+          <img class="img-fluid" src="{{url_for('static', filename='imgs/logo.png')}}"/>
+        </div>
+        <div class="col-lg-9">
+          <div>
+            <h1 id="orange_text" style="font-family: 'Be Vietnam', sans-serif;">"</h1>
+            <h4>There are people out there who cannot afford to sit and home. If they do not earn, they do not get paid, they go hungry. They Can't afford the SHUT DOWN. They can't stock-up the essentials as they live and earn daily. Open your heart, Extend your arms. Help the NEEDY.</h4>
+            <h1 id="orange_text" style="font-family: 'Be Vietnam', sans-serif;">"</h1> 
+        </div>
+        </div>
+      </div>
+    </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+  </div>
+
+</div>
+<div id="footer">
+  <div class="container">
+    <div class="row">
+    <footer class="center blue small-txt">
+      Copyright &copy; 2019 All rights reserved to &nbsp;<b>Help for Hind</b>&nbsp;&nbsp; |  &nbsp;&nbsp; 
+      <a href="https://www.facebook.com/Help-for-Hind-109297054048102/"><b style="color:rgb(0,101,202);">Find us on Facebook</b></a>
+    </footer>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
