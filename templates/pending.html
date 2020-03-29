@@ -46,11 +46,14 @@
 
 		<div class="container">
 		<!-- <div class="section2"> -->
-			<div style="float:left;">
+			<!-- <div style="float:left;">
 				<input type="text" id="myStateInput" onkeyup="myStateFunction()" placeholder="Search for state.." title="Type in a state">
-			</div>
+			</div> -->
 			<div style="float:left;">
 				<input type="text" id="myDistrictInput" onkeyup="myDistrictFunction()" placeholder="Search for district.." title="Type in a district">
+			</div>
+			<div style="float:left;">
+				<input type="text" id="myVolunteerInput" onkeyup="myVolunteerFunction()" placeholder="Search by volunteer.." title="Type in a volunteer">
 			</div>
 		</div>
 
@@ -133,7 +136,7 @@
 	</div>
 
 
-	<script>
+<!-- 	<script>
 		function myStateFunction() {
 		  var input, filter, table, tr, td, i, txtValue;
 		  input = document.getElementById("myStateInput");
@@ -153,7 +156,7 @@
 		  }
 		}
 		</script>
-
+ -->
 		<script>
 		function myDistrictFunction() {
 		  var input, filter, table, tr, td, i, txtValue;
@@ -163,6 +166,27 @@
 		  tr = table.getElementsByTagName("tr");
 		  for (i = 0; i < tr.length; i++) {
 		    td = tr[i].getElementsByTagName("td")[4];
+		    if (td) {
+		      txtValue = td.textContent || td.innerText;
+		      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+		</script>
+
+		<script>
+		function myVolunteerFunction() {
+		  var input, filter, table, tr, td, i, txtValue;
+		  input = document.getElementById("myVolunteerInput");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("pendingTable");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[11];
 		    if (td) {
 		      txtValue = td.textContent || td.innerText;
 		      if (txtValue.toUpperCase().indexOf(filter) > -1) {
