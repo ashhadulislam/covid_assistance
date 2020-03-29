@@ -27,9 +27,9 @@ def send_otp_sms(user_phone):
 	
 	# get data from sheet
 	sheetname="OTP_Record"
-	sheet=get_sheet(sheetname)
+	status,sheet=get_sheet(sheetname)
 
-	otp_records=(sheet.get_all_values())
+	otp_records=sheet.get_all_values()
 	number_exists=False
 	return_str="OK"
 
@@ -99,6 +99,24 @@ def send_otp_sms(user_phone):
 
 
 
+
+
+def send_otp_general_sms(user_phone,message):
+	account_sid = environ.get('account_sid')
+	auth_token =  environ.get('auth_token')
+
+	client = Client(account_sid, auth_token)
+	if "+91" not in user_phone and len(user_phone)!=13:
+		user_phone="+91"+user_phone
+
+	message = client.messages.create(
+		     body   =  str(message),
+		     from_  =  environ.get('reg_phone'),
+		     to     =  str(user_phone),
+		 )
+
+	print(message.sid)
+	print("message sent probably")
 
 
 

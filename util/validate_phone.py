@@ -14,7 +14,7 @@ def validate_phone(user_phone,user_given_otp):
     # check if the user number exists in the list
 
 	sheetname="OTP_Record"
-	sheet=get_sheet(sheetname)
+	status,sheet=get_sheet(sheetname)
 
 	otp_records=(sheet.get_all_values())
 	number_exists=False

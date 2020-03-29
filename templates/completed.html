@@ -35,16 +35,15 @@
 			  <tr>
 			  	<th>Request ID</th>
 			    <th>Name</th>
-			    <th>Contact Number</th>	
+			    <th>Contact Number</th>			    			    
 			    <th>Requestor State</th>
-			    <th>Requestor District</th>		    
-			    <th>Address</th>			    
-			    <th>Rice Quantity</th>
-			    <th>Wheat Quantity</th>
-			    <th>Oil Quantity</th>
-			    <th>Daal Quantity</th>
+			    <th>Requestor District</th>
+			    <th>Address</th>
+			    <th>Request Status</th>
+			    <th>Family Size</th>			    
 			    <th>Volunteer Name</th>
 			    <th>Volunteer Number</th>
+			    <th>Date Of Entry</th>
 			    
 			  </tr>
 			  
@@ -52,18 +51,16 @@
 			  <tr>
 			  	<td>{{item.request_id}}</td>
 			  	<td>{{item.name}}</td>
-			  	<td>{{item.contact_num}}</td>
+			  	<td>{{item.contact_num}}</td>		
 			  	<td>{{item.requestor_state}}</td>
-			  	<td>{{item.requestor_district}}</td>	  				  
+			  	<td>{{item.requestor_district}}</td>	  	
 			  	<td>{{item.requestor_address}}</td>
+			  	<td>{{item.request_status}}</td>
 			  	
-			  	
-			  	<td>{{item.rice_qty}}</td>
-			  	<td>{{item.wheat_qty}}</td>
-			  	<td>{{item.oil_qty}}</td>
-			  	<td>{{item.daal_qty}}</td>
+			  	<td>{{item.family_size}}</td>			  	
 			  	<td>{{item.volunteer_name}}</td>
 			  	<td>{{item.vol_contact_num}}</td>
+			  	<td>{{item.date_of_entry}}</td>
 		  	 	
 			  </tr>
 			  {% endfor %}

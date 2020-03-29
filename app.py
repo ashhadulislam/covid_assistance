@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request,send_from_directory, jsonify, url_for
+from flask import redirect
 # import gspread
 # from oauth2client.service_account import ServiceAccountCredentials
 
@@ -6,20 +7,25 @@ import sys
 sys.path.insert(0,'util/')
 # from filename import function
 
-from send_otp import send_otp_sms
+import datetime
+import pytz
+from send_otp import send_otp_sms,send_otp_general_sms
 from validate_phone import validate_phone
 
 from read_sheet import get_sheet
 
+from datetime import date
+
+
 application = Flask(__name__)
 
 # column number where status is mentioned in the sheet
-request_status_index=4
+request_status_index=5
 # counting from 0
 # when using in sheet, add 1
 
 # column number where benificiary number is mentioned in the sheet
-beneficiary_contact_index=9
+beneficiary_contact_index=7
 # counting from 0
 # when using in sheet, add 1
 
@@ -56,23 +62,22 @@ def convert_list_to_dict(the_request):
     dict_request["requestor_address"]=the_request[3]
     dict_request["request_status"]=the_request[4]
 
-    dict_request["rice_qty"]=the_request[5]
-    dict_request["wheat_qty"]=the_request[6]
-    dict_request["oil_qty"]=the_request[7]
-    dict_request["daal_qty"]=the_request[8]
+    dict_request["family_size"]=the_request[5]
+    
     # a gap for beneficiary
-    dict_request["volunteer_name"]=the_request[10]
-    dict_request["vol_contact_num"]=the_request[11]
+    dict_request["volunteer_name"]=the_request[7]
+    dict_request["vol_contact_num"]=the_request[8]
 
-    dict_request["requestor_state"]=the_request[12]
-    dict_request["requestor_district"]=the_request[13]
+    dict_request["requestor_state"]=the_request[9]
+    dict_request["requestor_district"]=the_request[10]
+    dict_request["date_of_entry"]=the_request[11]
 
-
+    print(dict_request)
     return dict_request
 
 
 
-def get_requests(status):
+def get_requests(need_status):
     '''
     insert into the google sheet in the order
     name, contact_num,lat, lon, address,
@@ -80,12 +85,14 @@ def get_requests(status):
     request_status
     '''
 
-    if status=="Completed":
+    if need_status=="Completed":
         sheetname="Daily_Completed"
-    elif status=="Pending":
+    elif need_status=="Pending":
         sheetname="Details_People"
 
-    sheet=get_sheet(sheetname)
+    status,sheet=get_sheet(sheetname)
+    if status == False:
+        return sheet
     list_of_requests=(sheet.get_all_values())
     print("number of rows ",len(sheet.get_all_values()))
     print("number of columns ",len(sheet.get_all_values()[0]))
@@ -95,10 +102,11 @@ def get_requests(status):
     
     # skip the first request since it is heading
     for the_request in list_of_requests[1:]:
-        print(the_request[request_status_index])
+        print("status is ",the_request[request_status_index-1],need_status)
         
 
-        if the_request[request_status_index]==status:
+        if the_request[request_status_index-1]==need_status:
+
             # dict_request={}
             # dict_request["request_id"]=the_request[0]
 
@@ -132,7 +140,7 @@ def pending():
     '''
     this function shows pending requests
     '''
-    list_requests=get_requests(status="Pending")
+    list_requests=get_requests(need_status="Pending")
     print("requests are ",list_requests)
 
     return render_template("pending.html", items=list_requests)
@@ -143,7 +151,7 @@ def complete():
     '''
     this function shows completed requests
     '''    
-    list_requests=get_requests(status="Completed")
+    list_requests=get_requests(need_status="Completed")
     print("requests are ",list_requests)
 
     return render_template("completed.html", items=list_requests)    
@@ -154,14 +162,17 @@ def complete():
 @application.route('/checkout',methods=["POST"])
 def checkout():
 
-    list_ids_to_mark_complete=[]
-    print(request.form.keys)
-    for key,val in request.form.items():
-        print(key)
-        if key!="contact_num":
-            list_ids_to_mark_complete.append(int(float(val)))
-    print(list_ids_to_mark_complete)
+    # list_ids_to_mark_complete=[]
+    # print(request.form.keys)
+    # for key,val in request.form.items():
+    #     print(key)
+    #     if key!="contact_num":
+    #         list_ids_to_mark_complete.append(int(float(val)))
+    # print(list_ids_to_mark_complete)
+
     benificiary_contact=request.form['contact_num']
+    amount_pledged=request.form['amount_pledged']
+    contrib_name=request.form['contrib_name']
 
     # some form validation here
 
@@ -183,35 +194,39 @@ def checkout():
 
     
 
-    if len(list_ids_to_mark_complete)==0:
-        return "Please go back and click on the check boxes \
-        to select the requirements you want to fulfill."
+    # if len(list_ids_to_mark_complete)==0:
+    #     return "Please go back and click on the check boxes \
+    #     to select the requirements you want to fulfill."
 
 
-    sheet=get_sheet("Details_People")
-    list_of_requests=(sheet.get_all_values())
+    # status,sheet=get_sheet("Details_People")
+    # if status==False:
+    #     return sheet
+    # list_of_requests=(sheet.get_all_values())
 
-    list_to_be_fulfilled=[]
+    # list_to_be_fulfilled=[]
 
-    row_count=2
-    for the_request in list_of_requests[1:]:
-        if int(float(the_request[0])) in list_ids_to_mark_complete:
-            # first create a dict out of the row
+    # row_count=2
+    # for the_request in list_of_requests[1:]:
+    #     if int(float(the_request[0])) in list_ids_to_mark_complete:
+    #         # first create a dict out of the row
 
-            dict_request=convert_list_to_dict(the_request)
+    #         dict_request=convert_list_to_dict(the_request)
 
 
 
 
             
 
-            list_to_be_fulfilled.append(dict_request)
-            # sheet.update_cell(row_count, request_status_index+1, "Completed")
-            # sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
-        row_count+=1
+    #         list_to_be_fulfilled.append(dict_request)
+    #         # sheet.update_cell(row_count, request_status_index+1, "Completed")
+    #         # sheet.update_cell(row_count, beneficiary_contact_index+1, str(benificiary_contact))
+    #     row_count+=1
 
-    print(list_to_be_fulfilled)
-    dict_order={"contributor_number":str(benificiary_contact),"order":list_to_be_fulfilled}
+    # print(list_to_be_fulfilled)
+    dict_order={"contributor_number":str(benificiary_contact),"amount_pledged":amount_pledged}
+    dict_order["contrib_name"]=contrib_name
+    
 
     # now generate the otp    
     return_str=send_otp_sms(str(benificiary_contact).strip())
@@ -227,43 +242,69 @@ def checkout():
 
 @application.route('/complete_payment',methods=["POST"])
 def complete_payment():
-    list_ids_to_mark_complete=[]
-    print(request.form.keys)
-    for key,val in request.form.items():
-        print(key)
-        if key!="contact_num" and key!="otp_num" and key!="return_message":
-            list_ids_to_mark_complete.append(int(float(val)))
-    print(list_ids_to_mark_complete)
+    # list_ids_to_mark_complete=[]
+    # print(request.form.keys)
+    # for key,val in request.form.items():
+    #     print(key)
+    #     if key!="contact_num" and key!="otp_num" and key!="return_message":
+    #         list_ids_to_mark_complete.append(int(float(val)))
+    # print(list_ids_to_mark_complete)
     benificiary_contact=request.form['contact_num']
     otp_num=request.form['otp_num']
+    amount_pledged=request.form['amount_pledged']
+    contrib_name=request.form['contrib_name']
+
+    
+
+    
 
     # now to check if otp matches with the otp mentioned in the sheet
     # also check for expired otp
 
+    is_valid=True
     is_valid=validate_phone(benificiary_contact,otp_num)
 
+    print("checked the otp")
+
     if is_valid:
-        # mark as complete
+        # add amount to sheet
 
-        sheet=get_sheet("Details_People")
-        list_of_requests=(sheet.get_all_values())
+        status,sheet=get_sheet("Payment Local")
+        if status==False:
+            return sheet
+        data_list=[contrib_name,benificiary_contact,amount_pledged]
 
-        list_to_be_fulfilled=[]
+        
+        my_date = datetime.datetime.now(pytz.timezone('Asia/Calcutta'))        
+        data_list.append(str(my_date))
+        index=len(sheet.get_all_values())+1
+        sheet.insert_row(data_list, index)
 
-        row_count=2
+
+
+
+
+        # status,sheet=get_sheet("Details_People")
+        # if status==False:
+        #     return sheet
+        # list_of_requests=(sheet.get_all_values())
+
+        # list_to_be_fulfilled=[]
+
+        # row_count=2
 
 
         # we'll check if the request ids match
-        for the_request in list_of_requests[1:]:
-            if int(float(the_request[0])) in list_ids_to_mark_complete:            
-                sheet.update_cell(row_count, request_status_index+1, "Completed")
-                sheet.update_cell(row_count, beneficiary_contact_index+1,
-                 str(benificiary_contact))
-            row_count+=1
+        # for the_request in list_of_requests[1:]:
+        #     if int(float(the_request[0])) in list_ids_to_mark_complete:            
+        #         sheet.update_cell(row_count, request_status_index+1, "Completed")
+        #         sheet.update_cell(row_count, beneficiary_contact_index+1,
+        #          str(benificiary_contact))
+        #     row_count+=1
 
 
 
-        return render_template('thank-you.html')
+        return redirect("https://imjo.in/U6X3pf")
     else:
         return "Some issue with your OTP, please go back and check out again"
 
@@ -282,7 +323,9 @@ def insert_into_gsheet(data_list):
     rice_qty, wheat_qty, oil_qty, daal_qty,
     request_status
     '''
-    sheet=get_sheet("Details_People")
+    status,sheet=get_sheet("Details_People_Intermediate")
+    if status==False:
+        return sheet
     
     row = data_list
     index = len(sheet.get_all_values())+1
@@ -294,6 +337,7 @@ def insert_into_gsheet(data_list):
         request_id=1
     row=[request_id]+row
     sheet.insert_row(row, index)
+    return True
 
 
 
@@ -317,7 +361,7 @@ def add_pending_request():
     requestor_state=str(request.form['requestor_state'])
     requestor_district=str(request.form['requestor_district'])
 
-    request_status="Pending"
+    request_status="Unverified"
 
     # here get approx location from lat long
     
@@ -326,10 +370,11 @@ def add_pending_request():
     
     
 
-    rice_qty=str(request.form['rice_qty'])
-    wheat_qty=str(request.form['wheat_qty'])
-    oil_qty=str(request.form['oil_qty'])
-    daal_qty=str(request.form['daal_qty'])
+    num_in_family=str(request.form['fam_size'])
+    # rice_qty=str(request.form['rice_qty'])
+    # wheat_qty=str(request.form['wheat_qty'])
+    # oil_qty=str(request.form['oil_qty'])
+    # daal_qty=str(request.form['daal_qty'])
 
     print(requestor_state,requestor_district)
 
@@ -343,29 +388,50 @@ def add_pending_request():
     data_list.append(requestor_address)   
     data_list.append(request_status) 
 
-    data_list.append(rice_qty)
-    data_list.append(wheat_qty)
-    data_list.append(oil_qty)
-    data_list.append(daal_qty)
+    data_list.append(num_in_family) 
+
+    # data_list.append(rice_qty)
+    # data_list.append(wheat_qty)
+    # data_list.append(oil_qty)
+    # data_list.append(daal_qty)
+
     data_list.append("")
     # above is for benificiary contact_num
+
     data_list.append(volunteer_name)
     data_list.append(vol_contact_num)
 
     data_list.append(requestor_state)
     data_list.append(requestor_district)
 
+    today = date.today()
+    
+    data_list.append(str(today.strftime("%d/%m/%Y")))
+
+
+    
 
 
 
-    print(name,contact_num,rice_qty,wheat_qty,oil_qty)
+
+    print(name,contact_num,num_in_family)
 
 
 
     
-    insert_into_gsheet(data_list)
+    status = insert_into_gsheet(data_list)
 
-    return render_template('base.html')
+    if status:
+        message="Thanks for registering a needy family.\
+        Once the background check is complete, \
+        the family you enlisted will appear at \
+        https://covid-help-2020.herokuapp.com/pending"
+
+        send_otp_general_sms(vol_contact_num,message)
+
+
+
+    return render_template('intermediate-register-confirmation.html')
 
 
 

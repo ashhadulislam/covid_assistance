@@ -12,5 +12,16 @@ def get_sheet(sheetname):
     client = gspread.authorize(creds)
     # Find a workbook by name and open the first sheet
     # Make sure you use the right name here.
-    sheet = client.open(sheetname).sheet1
-    return sheet
+    
+    status=True
+    sheet=None
+    try:
+        sheet = client.open(sheetname).sheet1
+        return status,sheet
+    except Exception as e: 
+        print(e)
+        print("An error")
+        print(sheet)
+        print("An exception occurred") 
+        status=False
+        return status,sheet
