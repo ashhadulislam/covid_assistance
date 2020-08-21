@@ -58,7 +58,8 @@
 			<div class="jumbotron jumbotron-fluid container_black_text">
 				
 						<p class="thick">
-							Search by year, district and constituency
+							Search by year, district and constituency.<br>
+							The years are 1952, 1956, 1958, 1959, 1961, 1966, 1967, 1968, 1970, 1971
 						</p>
 						<p class="normal">
 							Then download the pdf to check if the name you are looking for is present in the file.
@@ -66,24 +67,8 @@
 				
 			</div>
 		</div>
-		
-
-
-				
-			
-			
-		
-
-
-		
 			<div class="container">
-
-				 <!-- <h2>Click on the button below see and hide the list of needy people</h2> -->
-				 <!-- <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Click to Toggle</button>				 -->
-				
-				<!-- <div id ="demo" class="collapse"> -->
 				<div class="container">
-					<!-- <div class="container"> -->
 
 						<div style="float:left;">
 							<input type="text" id="myYearInput" onkeyup="mySearchFunction()" placeholder="Search by year.." title="Type in a volunteer">
@@ -95,17 +80,7 @@
 						<div style="float:left;">
 							<input type="text" id="myConstInput" onkeyup="mySearchFunction()" placeholder="Search for constituency.." title="Type in a constituency">
 						</div>
-
-
-						<!-- <div style="float:left;">
-							<input type="text" id="myStateInput" onkeyup="myStateFunction()" placeholder="Search for state.." title="Type in a state">
-						</div> -->
-	
-
 					</div>
-
-
-
 				<div class='container'>				
 					<table id="vlistTable" class="table">
 					  <tr>
@@ -123,22 +98,10 @@
 					  	<td>{% for link in item.link%}
 					  		 <a href="{{link}}" style="color:#0000ff;">Link To PDF</a><br>
 					  		{% endfor %}
-
-
 					  	</td>
-					  	
-
-
-				  	 	<!-- <td>
-				  	 		<input type="checkbox" id="request_number" name={{item.request_id}} value={{item.request_id}}>
-				  	 	</td> -->
 					  </tr>
 					  {% endfor %}
-						  
 						</table>
-						
-						
-						
 					
 				</div>
 			</div>
@@ -147,114 +110,9 @@
 			<div class="container_black_text" style = "justify-content: center;margin-top: 10px;">
 					
 			</div>
-			
-			
-
-
-
-
 		</div>
 
 
-	
-
-
-
-	  
-			
-
-
-
-		
-
-
-			
-
-		
-
-
-       
-
-
-<!-- 	<script>
-		function myStateFunction() {
-		  var input, filter, table, tr, td, i, txtValue;
-		  input = document.getElementById("myStateInput");
-		  filter = input.value.toUpperCase();
-		  table = document.getElementById("vlistTable");
-		  tr = table.getElementsByTagName("tr");
-		  for (i = 0; i < tr.length; i++) {
-		    td = tr[i].getElementsByTagName("td")[3];
-		    if (td) {
-		      txtValue = td.textContent || td.innerText;
-		      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-		        tr[i].style.display = "";
-		      } else {
-		        tr[i].style.display = "none";
-		      }
-		    }       
-		  }
-		}
-		</script>
- -->
-
- 		<script>
-		function mySearchFunction() {
-
-		  var table, tr, td_district,td_year, i, txtValue;
-
-		  var district_in
-		  var check_district
-		  district_in=document.getElementById("myDistrictInput");
-
-		  var year_in
-		  year_in=document.getElementById("myYearInput");
-
-		  filter_district=district_in.value.toUpperCase()
-		  check_district=false
-		  if(filter_district){
-		  	check_district=true;
-		  }
-
-		  
-		  table = document.getElementById("vlistTable");
-
-		  tr = table.getElementsByTagName("tr");
-
-		  for (i = 0; i < tr.length; i++) {
-		  	console.log(tr[i].getElementsByTagName("td"))
-		    td_district = tr[i].getElementsByTagName("td")[1];
-		    td_year = tr[i].getElementsByTagName("td")[0];
-
-		    console.log(td_district,td_year);
-		    if (td_district){
-		    	console.log("creating txtvalue");
-	    	  txtValue = td_district.textContent || td_district.innerText;
-		    }
-		    if (check_district){
-		    	if (txtValue.toUpperCase().indexOf(filter_district) > -1) 
-		      {
-
-		        tr[i].style.display = "";
-		      } else {
-		        tr[i].style.display = "none";
-		      }
-		    }
-
-		    
-		    // if (td_district) {
-		    //   txtValue = td_district.textContent || td_district.innerText;
-		      // if (txtValue.toUpperCase().indexOf(filter_district) > -1) 
-		      // {
-
-		      //   tr[i].style.display = "";
-		      // } else {
-		      //   tr[i].style.display = "none";
-		      // }
-		    // }       
-		  }
-		}
-		</script>
 		
 		<script>
 		function mySearchFunction() {
@@ -296,10 +154,7 @@
 			      } else {
 			        tr[i].style.display = "none";
 			      }
-
-
 			    }
-
 		    }
 
 		    if(tr[i].style.display == ""){
@@ -311,45 +166,14 @@
 			      } else {
 			        tr[i].style.display = "none";
 			      }
-
-
 			    }
-
 		    }
 
-		    
-
-		    
-
-
-
 		  }
-
-
-
 	}
 		</script> 
 
-		<!-- <script>
-		function myYearFunction() {
-		  var input, filter, table, tr, td, i, txtValue;
-		  input = document.getElementById("myYearInput");
-		  filter = input.value.toUpperCase();
-		  table = document.getElementById("vlistTable");
-		  tr = table.getElementsByTagName("tr");
-		  for (i = 0; i < tr.length; i++) {
-		    td = tr[i].getElementsByTagName("td")[0];
-		    if (td) {
-		      txtValue = td.textContent || td.innerText;
-		      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-		        tr[i].style.display = "";
-		      } else {
-		        tr[i].style.display = "none";
-		      }
-		    }       
-		  }
-		}
-		</script> -->
+		
 
 
 
