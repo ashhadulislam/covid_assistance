@@ -16,6 +16,7 @@ from read_sheet import get_sheet
 
 
 from datetime import date
+import pandas as pd
 
 
 application = Flask(__name__)
@@ -132,6 +133,38 @@ def addneedy():
 def contact():    
     return render_template('contact.html')
 
+
+def replace_links_as_arrays(dict_vals):
+    '''
+    this one replaces the comma separated links at the end
+    as list of links
+    '''
+    for dv in dict_vals:
+        linkstring=dv["link"]
+        list_urls=linkstring.split(",")
+        dv["link"]=list_urls
+
+    return dict_vals
+                
+
+@application.route('/vlist',methods=["GET"])
+def vlist():
+    '''
+    this function shows electorate details
+    '''
+    df=pd.read_csv("static/data/all_links.csv")
+    print(df.head())
+    dict_vals=df.to_dict('records')
+    
+
+    dict_vals=replace_links_as_arrays(dict_vals)
+    print(dict_vals)
+
+
+    # list_requests=get_requests(sheetname="Details_People",need_status="Pending")
+    # print("requests are ",list_requests)
+
+    return render_template("electorate.html", items=dict_vals)
 
 
 
