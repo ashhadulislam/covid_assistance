@@ -140,9 +140,24 @@ def replace_links_as_arrays(dict_vals):
     as list of links
     '''
     for dv in dict_vals:
-        linkstring=dv["link"]
-        list_urls=linkstring.split(",")
-        dv["link"]=list_urls
+        linkstring=dv["new_links"]
+
+        # print(type(linkstring))
+        
+        if  not isinstance(linkstring, float):
+            if len(linkstring)>0:            
+                list_urls=linkstring.split(",")
+            else:
+                print("Such a 0")
+                list_urls=["No Link Yet"]
+
+        if isinstance(linkstring,float):
+            print(type(linkstring))
+            print(linkstring)
+            list_urls=["No Link Yet"]
+
+        dv["new_links"]=list_urls
+        # print(dv)
 
     return dict_vals
                 
@@ -152,13 +167,17 @@ def vlist():
     '''
     this function shows electorate details
     '''
-    df=pd.read_csv("static/data/all_links.csv")
+    df=pd.read_csv("static/data/gdrive_all_links_part1.csv")
     print(df.head())
     dict_vals=df.to_dict('records')
+    print(len(dict_vals))
     
 
     dict_vals=replace_links_as_arrays(dict_vals)
-    print(dict_vals)
+    # print(dict_vals)
+    # for val in dict_vals:
+    #     print(val["new_links"])
+
 
 
     # list_requests=get_requests(sheetname="Details_People",need_status="Pending")
